@@ -1,0 +1,9 @@
+{
+  "name": "mixpanel",
+  "description": "mixpanel analytics repackaged for Meteor",
+  "homepage": "https://github.com/belisarius222/meteor-mixpanel",
+  "author": "Ted Blackman <ted.blackman@gmail.com>",
+  "version": "2.2",
+  "git": "https://github.com/belisarius222/meteor-mixpanel.git",
+  "packages": {}
+}
