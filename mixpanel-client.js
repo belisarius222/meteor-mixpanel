@@ -1,38 +1,69 @@
-(function (c, a) {
-    window.mixpanel = a;
-    var b, d, h, e;
+(function (document, mixpanel) {
+    window.mixpanel = mixpanel; 
 
     var loadScript = function() {
-        var script = document.createElement("script");
+        var script, firstScript;
+        script = document.createElement("script");
         script.type = "text/javascript";
-        script.async = true;
+        script.async = !0;
         script.src = ("https:" === document.location.protocol ? "https:" : "http:") +
             '//cdn.mxpnl.com/libs/mixpanel-2.2.min.js';
-        var firstScript = document.getElementsByTagName("script")[0];
+        firstScript = document.getElementsByTagName("script")[0];
         firstScript.parentNode.insertBefore(script, firstScript);
     };
 
-    a._i = [];
-    a.init = function (b, c, f) {
+    mixpanel._i = [];
+
+    var createCommands = function(mixpanelTracker) {
+        var commands = [
+            'disable', 
+            'track', 
+            'track_pageview', 
+            'track_links',
+            'track_forms', 
+            'register', 
+            'register_once', 
+            'unregister', 
+            'identify', 
+            'alias', 
+            'name_tag',
+            'set_config'
+        ];
+        var peopleCommands = ['set','increment','track_charge','append'];
+        var addCommand = function(tracker,command) {
+            tracker[command] = function() {
+                var commandArray = [command].concat(_.toArray(arguments));
+                tracker.push(commandArray);
+            };
+        };
+
+        _.each(commands,function(command){
+            addCommand(mixpanelTracker,command);
+        });
+
+        _.each(peopleCommands,function(command){
+            addCommand(mixpanelTracker.people,command);
+        });
+    };
+
+    mixpanel.init = function(token, config, name) {
+        var proxy = mixpanel;
 
         loadScript();
 
-        function d(a, b) {
-            var c = b.split(".");
-            2 == c.length && (a = a[c[0]], b = c[1]);
-            a[b] = function () {
-                a.push([b].concat(
-                Array.prototype.slice.call(arguments, 0)))
-            }
+        if ('undefined' !== typeof name) {
+            proxy = mixpanel[name] = [];
+            createCommands(proxy); // this was originally run unconditionally
         }
-        var g = a;
-        "undefined" !== typeof f ? g = a[f] = [] : f = "mixpanel";
-        g.people = g.people || [];
-        h = ['disable', 'track', 'track_pageview', 'track_links',
-            'track_forms', 'register', 'register_once', 'unregister', 'identify', 'alias', 'name_tag',
-            'set_config', 'people.set', 'people.increment', 'people.track_charge', 'people.append'];
-        for (e = 0; e < h.length; e++) d(g, h[e]);
-        a._i.push([b, c, f])
+        else
+            name = 'mixpanel';
+        proxy.people  = proxy.people || [];
+        mixpanel._i.push([token, config, name]);
     };
-    a.__SV = 1.2;
+
+    mixpanel.__SV = 1.2;
+
+    mixpanel.people = [];
+    createCommands(mixpanel);
+
 })(document, window.mixpanel || []);
