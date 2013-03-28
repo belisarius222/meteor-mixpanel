@@ -3,7 +3,7 @@
   "description": "mixpanel analytics repackaged for Meteor",
   "homepage": "https://github.com/belisarius222/meteor-mixpanel",
   "author": "Ted Blackman <ted.blackman@gmail.com>",
-  "version": "2.2",
+  "version": "2.2.1",
   "git": "https://github.com/belisarius222/meteor-mixpanel.git",
   "packages": {}
 }
