@@ -3,7 +3,8 @@ Package.describe({
 });
 
 Package.on_use(function (api) {
-	api.add_files([
+	api.use('underscore', 'client');
+    api.add_files([
 		'mixpanel-client.js'
 	],'client');
 });
